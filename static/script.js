@@ -1,6 +1,5 @@
 
-const textInput = document.getElementById('text-input');
-const sendTextButton = document.getElementById('send-text');
+
 const recordAudioButton = document.getElementById('record-audio');
 const stopAudioButton = document.getElementById('stop-audio');
 const audioPlayback = document.getElementById('audio-playback');
@@ -8,23 +7,7 @@ const audioPlayback = document.getElementById('audio-playback');
 let mediaRecorder;
 let audioChunks = [];
 
-// Send text input
-sendTextButton.addEventListener('click', async () => {
-    const text = textInput.value;
-    if (text) {
-        const formData = new FormData();
-        formData.append('text', text);
 
-        const response = await fetch('/process', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-        console.log(result);
-        textInput.value = '';
-    }
-});
 
 // Record audio
 recordAudioButton.addEventListener('click', async () => {
@@ -50,6 +33,10 @@ recordAudioButton.addEventListener('click', async () => {
 
         const result = await response.json();
         console.log(result);
+        if (result.filename) {
+            audioPlayback.src = `/uploads/${result.filename.split('/').pop()}`;
+            audioPlayback.play();
+        }
 
         audioChunks = [];
     };

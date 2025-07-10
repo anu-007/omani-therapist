@@ -1,18 +1,14 @@
 import random
-import asyncio
-import io
-from PIL import Image
-from pathlib import Path
 from typing import Optional
-from food_order.runner import get_runner
-from food_order.services.sessions import CustomSessionService, get_session
-from food_order.services.artifacts import get_artifacts
 from google.genai import types
-from food_order.core.config import APP_NAME, SESSION_ID, USER_ID
+
+from .runner import get_runner
+from .services.session import CustomSessionService
+from .services.artifacts import get_artifacts
+from core.config import APP_NAME, USER_ID
 
 async def run_conversation(preference_text: Optional[str] = None):
     try:
-        print("\n=== Starting Food Order Workflow ===")
         SESSION_ID = str(random.randint(1, 1000))
 
         # Initialize session service first
