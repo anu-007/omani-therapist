@@ -52,6 +52,7 @@ async def process_input(audio: UploadFile = File(None)):
 
         speech_from_text_path = generate_speech(bot_response, ARABIC_VOICE_ID, OUTPUT_AUDIO_PATH)
         return {"filename": speech_from_text_path}
+        # print('bot_response', bot_response)
 
     return {"error": "No input received"}
 

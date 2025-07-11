@@ -3,11 +3,14 @@
 const recordAudioButton = document.getElementById('record-audio');
 const stopAudioButton = document.getElementById('stop-audio');
 const audioPlayback = document.getElementById('audio-playback');
+const consentCheckbox = document.getElementById('consent-checkbox');
 
 let mediaRecorder;
 let audioChunks = [];
 
-
+consentCheckbox.addEventListener('change', () => {
+    recordAudioButton.disabled = !consentCheckbox.checked;
+});
 
 // Record audio
 recordAudioButton.addEventListener('click', async () => {

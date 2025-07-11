@@ -62,7 +62,10 @@ SUICIDE_KEYWORDS = [
     "suicide",
     "can't go on",
     "I give up",
-    "no point"
+    "no point",
+
+    # Keyword set by agent
+    "[CRISIS_DETECTED]"
 ]
 
 HARM_OTHERS_KEYWORDS = [
@@ -94,5 +97,8 @@ HARM_OTHERS_KEYWORDS = [
     "I want to harm",
     "revenge",
     "attack him/her",
-    "gonna get them"
+    "gonna get them",
+
+    # Keyword set by agent
+    "[CRISIS_DETECTED]"
 ]
