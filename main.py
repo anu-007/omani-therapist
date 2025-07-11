@@ -1,7 +1,8 @@
+import os
 import uvicorn
 import shutil
 from pathlib import Path
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from agents.conversation import run_conversation

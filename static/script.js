@@ -8,8 +8,27 @@ const consentCheckbox = document.getElementById('consent-checkbox');
 let mediaRecorder;
 let audioChunks = [];
 
-consentCheckbox.addEventListener('change', () => {
+consentCheckbox.addEventListener('change', async () => {
     recordAudioButton.disabled = !consentCheckbox.checked;
+    if (consentCheckbox.checked) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        audioPlayback.src = '/uploads/welcome.mp3';
+        audioPlayback.play();
+    } else {
+        if (audioPlayback) {
+            audioPlayback.pause();
+            audioPlayback.currentTime = 0;
+        }
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+        }
+    }
 });
 
 // Record audio
