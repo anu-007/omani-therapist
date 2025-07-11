@@ -1,16 +1,21 @@
-import os
 import uvicorn
 import shutil
 from pathlib import Path
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from agents.conversation import run_conversation
 from helpers.speech_to_text import transcribe_audio
 from helpers.text_to_speech import generate_speech
+from helpers.constants import CRISIS_RESPONSES
 from helpers.crisis import detect_crisis
+from database import init_db, log_crisis
 
 app = FastAPI()
+
+@app.on_event("startup")
+async def startup_event():
+    init_db()
 
 # Serve static files (HTML, CSS, JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -26,7 +31,7 @@ async def ping():
     return {"message": "pong"}
 
 @app.post("/process")
-async def process_input(audio: UploadFile = File(None)):
+async def process_input(audio: UploadFile = File(None), user_id: str = None, session_id: str = None):
     if audio:
         with open(f"uploads/{audio.filename}", "wb") as buffer:
             shutil.copyfileobj(audio.file, buffer)
@@ -49,7 +54,11 @@ async def process_input(audio: UploadFile = File(None)):
         if harmful_text:
             bot_response = harmful_text
         else:
-            bot_response = await run_conversation(text_from_audio)
+            bot_response = await run_conversation(text_from_audio, user_id, session_id)
+
+        # log crisis texts
+        if bot_response in CRISIS_RESPONSES:
+            log_crisis(text_from_audio, user_id, session_id)
 
         speech_from_text_path = generate_speech(bot_response, ARABIC_VOICE_ID, OUTPUT_AUDIO_PATH)
         return {"filename": speech_from_text_path}

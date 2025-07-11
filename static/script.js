@@ -1,9 +1,26 @@
-
-
 const recordAudioButton = document.getElementById('record-audio');
 const stopAudioButton = document.getElementById('stop-audio');
 const audioPlayback = document.getElementById('audio-playback');
 const consentCheckbox = document.getElementById('consent-checkbox');
+
+// Function to generate a UUID
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        let r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+// Get or generate USER_ID
+let USER_ID = localStorage.getItem('user_id');
+if (!USER_ID) {
+    USER_ID = generateUUID();
+    localStorage.setItem('user_id', USER_ID);
+}
+
+// Generate a new SESSION_ID for each session
+const SESSION_ID = generateUUID();
 
 let mediaRecorder;
 let audioChunks = [];
@@ -48,13 +65,12 @@ recordAudioButton.addEventListener('click', async () => {
         const formData = new FormData();
         formData.append('audio', audioBlob, 'recording.wav');
 
-        const response = await fetch('/process', {
+        const response = await fetch(`/process?user_id=${USER_ID}&session_id=${SESSION_ID}`, {
             method: 'POST',
             body: formData
         });
 
         const result = await response.json();
-        console.log(result);
         if (result.filename) {
             audioPlayback.src = `/uploads/${result.filename.split('/').pop()}`;
             audioPlayback.play();

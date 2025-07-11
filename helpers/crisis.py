@@ -21,7 +21,7 @@ def detect_crisis(message: str) -> str | None:
     if crisis_type:
         protocol = CRISIS_PROTOCOLS.get(crisis_type, CRISIS_PROTOCOLS["suicide_risk"])
         bot_message = protocol["text_response"]
-    
+
     return bot_message
 
 

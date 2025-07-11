@@ -5,20 +5,18 @@ from google.genai import types
 from .runner import get_runner
 from .services.session import CustomSessionService
 from .services.artifacts import get_artifacts
-from core.config import APP_NAME, USER_ID
+from core.config import APP_NAME
 
-async def run_conversation(preference_text: Optional[str] = None):
+async def run_conversation(user_text: Optional[str] = None, user_id: str = None, session_id: str = None):
     try:
-        SESSION_ID = str(random.randint(1, 1000))
-
         # Initialize session service first
         session_service = CustomSessionService()
         
         # Create session using the service
         await session_service.create_session(
             app_name=APP_NAME,
-            user_id=USER_ID,
-            session_id=SESSION_ID
+            user_id=user_id or str(random.randint(1, 1000)),
+            session_id=session_id or str(random.randint(1, 1000))
         )
 
         # get artifact
@@ -28,12 +26,12 @@ async def run_conversation(preference_text: Optional[str] = None):
         runner = get_runner(APP_NAME, session_service, artifact)
 
         # forma initial message
-        content = types.Content(role='user', parts=[types.Part(text=preference_text)])
+        content = types.Content(role='user', parts=[types.Part(text=user_text)])
 
         # run convertation
-        async for event in runner.run_async(user_id=USER_ID, session_id=SESSION_ID, new_message=content):
+        async for event in runner.run_async(user_id=user_id, session_id=session_id, new_message=content):
             if event.actions and (event.actions.escalate or event.actions.transfer_to_agent):
-                await CustomSessionService.filter_events(session_service, APP_NAME, USER_ID, SESSION_ID)
+                await CustomSessionService.filter_events(session_service, APP_NAME, user_id, session_id)
             
             if event.is_final_response() and event.content and event.content.parts:
                 final_response_text = event.content.parts[0].text

@@ -3,6 +3,7 @@ from typing import Optional
 from google.adk.agents.callback_context import CallbackContext
 from helpers.crisis import detect_crisis
 
+# NOTE: get userid and session id here
 def modify_output_after_agent(callback_context: CallbackContext) -> Optional[types.Content]:
     """
     Checks for crisis related statements from agent response.
