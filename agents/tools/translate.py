@@ -1,6 +1,6 @@
 from google.adk.tools import ToolContext
 from litellm import completion
-from core.config import MODEL_TEXT
+from core.config import MODEL_TEXT_PRIMARY
 from ..prompts import translate_to_english_prompt
 
 def translate_to_english(tool_context: ToolContext) -> dict:
@@ -14,10 +14,10 @@ def translate_to_english(tool_context: ToolContext) -> dict:
         dict: A dictionary containing status and translated text
     """
     try:
-        print("===== Dish details enrichment ========")
+        print("===== Translate to english ========")
 
         translated_text = completion(
-            model = MODEL_TEXT,
+            model = MODEL_TEXT_PRIMARY,
             messages=[
                 {
                     "role": "user",

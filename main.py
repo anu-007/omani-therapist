@@ -1,12 +1,13 @@
 import uvicorn
 import shutil
 from pathlib import Path
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from agents.conversation import run_conversation
 from helpers.speech_to_text import transcribe_audio
 from helpers.text_to_speech import generate_speech
+from helpers.crisis import detect_crisis
 
 app = FastAPI()
 
@@ -24,12 +25,8 @@ async def ping():
     return {"message": "pong"}
 
 @app.post("/process")
-async def process_input(text: str = Form(None), audio: UploadFile = File(None)):
-    if text:
-        print(f"Received text: {text}")
-        return {"text": text}
+async def process_input(audio: UploadFile = File(None)):
     if audio:
-        # Save the audio file
         with open(f"uploads/{audio.filename}", "wb") as buffer:
             shutil.copyfileobj(audio.file, buffer)
 
@@ -41,16 +38,19 @@ async def process_input(text: str = Form(None), audio: UploadFile = File(None)):
         if not FILE_PATH.exists():
             raise FileNotFoundError(f"Audio file not found at: {FILE_PATH}")
 
-        print('FILE_PATH', FILE_PATH)
+        # get text from the audio
         text_from_audio = transcribe_audio(FILE_PATH)
+        
+        # check if text is harmful or not
+        harmful_text = detect_crisis(text_from_audio)
 
-        print('text_from_audio', text_from_audio)
-        conv = await run_conversation(text_from_audio)
-        print('conv', conv)
+        bot_response = None
+        if harmful_text:
+            bot_response = harmful_text
+        else:
+            bot_response = await run_conversation(text_from_audio)
 
-        speech_from_text_path = generate_speech(conv, ARABIC_VOICE_ID, OUTPUT_AUDIO_PATH)
-
-        print(f"Response audio file: {speech_from_text_path}")
+        speech_from_text_path = generate_speech(bot_response, ARABIC_VOICE_ID, OUTPUT_AUDIO_PATH)
         return {"filename": speech_from_text_path}
 
     return {"error": "No input received"}
