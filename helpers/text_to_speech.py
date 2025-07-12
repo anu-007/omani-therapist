@@ -1,5 +1,6 @@
 import os
 from elevenlabs.client import ElevenLabs
+from .logger import logger
 
 def generate_speech(text, voice_id, output_path):
     """
@@ -26,9 +27,9 @@ def generate_speech(text, voice_id, output_path):
         with open(output_path, "wb") as f:
             for chunk in audio_stream:
                 f.write(chunk)
-        print(f"   Generated audio saved to: {output_path}")
+        logger.info(f"Generated audio saved to: {output_path}")
 
         return output_path
     except Exception as e:
-        print(f"Error during ElevenLabs TTS: {e}")
+        logger.error(f"Error during ElevenLabs TTS: {e}")
         return None

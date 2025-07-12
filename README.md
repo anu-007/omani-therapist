@@ -41,7 +41,7 @@ The Omani Therapist is a voice-based mental health chatbot designed to provide c
 ---
 
 ## Flow Diagram
-![Flow diagram](https://github.com/user-attachments/assets/a8b2b8f-c0f5-4143-84c8-78d0cf4c92d4)
+![Flow diagram](https://github.com/user-attachments/assets/cb29a0ee-99b8-4e00-b764-f4be943804e6)
 
 1.  **Core Flow**
     * The user records an audio message in the browser and clicks `Stop Recording`.
@@ -114,7 +114,7 @@ The system is composed of the following key components:
     ```
 5.  **Run the application:**
     ```bash
-    uvicorn main:app --host 0.0.0.0 --port $PORT
+    mkdir -p uploads && uvicorn main:app --host 0.0.0.0 --port $PORT
     ```
 6.  Open your browser and navigate to `http://localhost:<port>`.
 

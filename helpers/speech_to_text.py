@@ -1,5 +1,6 @@
 import openai
 import os
+from .logger import logger
 
 def transcribe_audio(audio_file_path):
     """
@@ -22,5 +23,5 @@ def transcribe_audio(audio_file_path):
             )
         return transcript.text
     except Exception as e:
-        print(f"Error during Whisper transcription: {e}")
+        logger.error(f"Error during Whisper transcription: {e}")
         return None

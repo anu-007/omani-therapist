@@ -20,3 +20,6 @@ encryption.key
 
 # crisis db logs
 crisis_logs.db
+
+# log files
+*.log

@@ -2,6 +2,7 @@ from google.genai import types
 from typing import Optional
 from google.adk.agents.callback_context import CallbackContext
 from helpers.crisis import detect_crisis
+from helpers.logger import logger
 
 def modify_output_after_agent(callback_context: CallbackContext) -> Optional[types.Content]:
     """
@@ -13,21 +14,18 @@ def modify_output_after_agent(callback_context: CallbackContext) -> Optional[typ
     invocation_id = callback_context.invocation_id
     current_state = callback_context.state.to_dict()
 
-    print(f"\n[Callback] Exiting agent: {agent_name} (Inv: {invocation_id})")
-    print(f"[Callback] Current State: {current_state}")
+    logger.info(f"\n[Callback] Exiting agent: {agent_name} (Inv: {invocation_id})")
 
     filtered_text = None
 
     if agent_name == 'primary_therapist':
         primary_therapist_message = current_state.get("primary_therapist_response")
-        print('primary_therapist_message', primary_therapist_message)
         filtered_text = detect_crisis(primary_therapist_message) or primary_therapist_message
     elif agent_name == 'fallback_therapist':
         fallback_therapist_message = current_state.get("fallback_therapist_response")
-        print('fallback_therapist_message', fallback_therapist_message)
         filtered_text = detect_crisis(fallback_therapist_message) or fallback_therapist_message
     else:
-        print(f"[Callback] State condition not met: Using agent {agent_name}'s original output.")
+        logger.info(f"[Callback] State condition not met: Using agent {agent_name}'s original output.")
         return None
 
     return types.Content(

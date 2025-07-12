@@ -28,7 +28,6 @@ class CustomInMemorySessionService(InMemorySessionService):
             raise ValueError(f"No session found for {app}/{user}/{sess}")
 
         filtered_events = []
-        print('=======current_session.events before==========',len(current_session.events))
         
         # Filter events without modifying DB
         for event in current_session.events:
@@ -41,6 +40,5 @@ class CustomInMemorySessionService(InMemorySessionService):
 
         # Update only the filtered session's events
         current_session.events = filtered_events
-        print('========filtered_session.events after=========', len(current_session.events))
         
         return current_session

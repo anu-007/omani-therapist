@@ -6,12 +6,12 @@ from .runner import get_runner
 from .services.session import CustomInMemorySessionService
 from .services.artifacts import get_artifacts
 from core.config import APP_NAME
+from helpers.logger import logger
 
 async def run_conversation(user_text: Optional[str] = None, user_id: str = None, session_id: str = None):
     try:
         # Initialize session service first
         session_service = CustomInMemorySessionService()
-        print('CUstom in memory session init')
 
         # find existing session
         found_session = await session_service.get_session(app_name=APP_NAME, user_id=user_id, session_id=session_id)
@@ -40,10 +40,9 @@ async def run_conversation(user_text: Optional[str] = None, user_id: str = None,
             
             if event.is_final_response() and event.content and event.content.parts:
                 final_response_text = event.content.parts[0].text
-        
-        print("Workflow completed with result:", final_response_text)
+
         return final_response_text
         
     except Exception as e:
-        print(f"Error in run_conversation: {str(e)}")
+        logger.error(f"Error in run_conversation: {str(e)}")
         raise

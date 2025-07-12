@@ -65,18 +65,39 @@ recordAudioButton.addEventListener('click', async () => {
             url += `&consent=allow`;
         }
 
-        const response = await fetch(url, {
-            method: 'POST',
-            body: formData
-        });
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData
+            });
 
-        const result = await response.json();
-        if (result.filename) {
-            audioPlayback.src = `/uploads/${result.filename.split('/').pop()}`;
-            audioPlayback.play();
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('audio/')) {
+                const responseAudioBlob = await response.blob();
+                const responseAudioUrl = URL.createObjectURL(responseAudioBlob);
+
+                audioPlayback.src = responseAudioUrl;
+                audioPlayback.play()
+                    .then(() => {
+                        console.log('Backend audio played successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error playing backend audio:', error);
+                        alert('Could not play backend audio. Check console for details.');
+                    });
+
+                audioChunks = [];
+            } else {
+                const errorResult = await response.json();
+                const errorMessage = errorResult.error || `HTTP error! Status: ${response.status} - ${JSON.stringify(errorResult)}`;
+                throw new Error(errorMessage);
+            }
+        } catch (error) {
+            console.error('Error during audio processing or playback:', error);
+            alert('An error occurred during processing or playing audio: ' + error.message);
+        } finally {
+            audioChunks = [];
         }
-
-        audioChunks = [];
     };
 
     mediaRecorder.start();

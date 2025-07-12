@@ -2,6 +2,7 @@ import os
 import sqlite3
 from cryptography.fernet import Fernet
 from datetime import datetime
+from helpers.logger import logger
 
 DATABASE_FILE = 'crisis_logs.db'
 
@@ -23,7 +24,7 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
-    print(f"Database '{DATABASE_FILE}' initialized.")
+    logger.info(f"Database '{DATABASE_FILE}' initialized.")
 
 def encrypt_text(text: str) -> str:
     """Encrypts the input text"""
@@ -44,7 +45,7 @@ def log_crisis(detected_text: str, user_id: str = None, session_id: str = None):
                    (timestamp, encrypted_text, user_id, session_id))
     conn.commit()
     conn.close()
-    print(f"Logged encrypted data for (User: {user_id}, Session: {session_id}) at {timestamp}")
+    logger.info(f"Logged encrypted data for (User: {user_id}, Session: {session_id}) at {timestamp}")
 
 def get_crisis_log(log_id: int) -> dict:
     """Retrieves and decrypts a crisis log entry"""
@@ -67,5 +68,3 @@ def get_crisis_log(log_id: int) -> dict:
 if __name__ == '__main__':
     # Example usage:
     init_db()
-    log_crisis("User expressed suicidal thoughts.", user_id="test_user_1", session_id="test_session_1")
-    log_crisis("User mentioned feeling hopeless.", user_id="test_user_2", session_id="test_session_2")
