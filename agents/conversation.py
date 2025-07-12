@@ -3,19 +3,15 @@ from typing import Optional
 from google.genai import types
 
 from .runner import get_runner
-from .services.session import CustomDBSessionService, CustomInMemorySessionService
+from .services.session import CustomInMemorySessionService
 from .services.artifacts import get_artifacts
 from core.config import APP_NAME
 
-async def run_conversation(user_text: Optional[str] = None, user_id: str = None, session_id: str = None, consent: str = None):
+async def run_conversation(user_text: Optional[str] = None, user_id: str = None, session_id: str = None):
     try:
         # Initialize session service first
-        if consent == "allow":
-            session_service = CustomDBSessionService()
-            print('CUstom db session init')
-        else:
-            session_service = CustomInMemorySessionService()
-            print('CUstom in memory session init')
+        session_service = CustomInMemorySessionService()
+        print('CUstom in memory session init')
 
         # find existing session
         found_session = await session_service.get_session(app_name=APP_NAME, user_id=user_id, session_id=session_id)
@@ -40,10 +36,7 @@ async def run_conversation(user_text: Optional[str] = None, user_id: str = None,
         # run convertation
         async for event in runner.run_async(user_id=user_id, session_id=session_id, new_message=content):
             if event.actions and (event.actions.escalate or event.actions.transfer_to_agent):
-                if session_id:
-                    await CustomDBSessionService.filter_events(session_service, APP_NAME, user_id, session_id)
-                else:
-                    await CustomInMemorySessionService.filter_events(session_service, APP_NAME, user_id, session_id)
+                await CustomInMemorySessionService.filter_events(session_service, APP_NAME, user_id, session_id)
             
             if event.is_final_response() and event.content and event.content.parts:
                 final_response_text = event.content.parts[0].text

@@ -66,11 +66,12 @@ async def process_input(
         if harmful_text:
             bot_response = harmful_text
         else:
-            bot_response = await run_conversation(text_from_audio, user_id, session_id, consent)
+            bot_response = await run_conversation(text_from_audio, user_id, session_id)
 
         # log crisis texts
-        if bot_response in CRISIS_RESPONSES:
+        if consent == 'allow':
             log_crisis(text_from_audio, user_id, session_id)
+            log_crisis(bot_response, user_id, session_id)
 
         # get speech from the text
         # speech_from_text_path = generate_speech(bot_response, ARABIC_VOICE_ID, OUTPUT_AUDIO_PATH)

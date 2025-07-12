@@ -2,7 +2,6 @@ import os
 import sqlite3
 from cryptography.fernet import Fernet
 from datetime import datetime
-from base64 import b64encode
 
 DATABASE_FILE = 'crisis_logs.db'
 KEY_FILE = 'encryption.key'
@@ -57,7 +56,7 @@ def log_crisis(detected_text: str, user_id: str = None, session_id: str = None):
                    (timestamp, encrypted_text, user_id, session_id))
     conn.commit()
     conn.close()
-    print(f"Logged encrypted crisis for (User: {user_id}, Session: {session_id}) at {timestamp}")
+    print(f"Logged encrypted data for (User: {user_id}, Session: {session_id}) at {timestamp}")
 
 def get_crisis_log(log_id: int) -> dict:
     """Retrieves and decrypts a crisis log entry"""
