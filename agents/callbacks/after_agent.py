@@ -3,7 +3,6 @@ from typing import Optional
 from google.adk.agents.callback_context import CallbackContext
 from helpers.crisis import detect_crisis
 
-# NOTE: get userid and session id here
 def modify_output_after_agent(callback_context: CallbackContext) -> Optional[types.Content]:
     """
     Checks for crisis related statements from agent response.
@@ -21,14 +20,15 @@ def modify_output_after_agent(callback_context: CallbackContext) -> Optional[typ
 
     if agent_name == 'primary_therapist':
         primary_therapist_message = current_state.get("primary_therapist_response")
+        print('primary_therapist_message', primary_therapist_message)
         filtered_text = detect_crisis(primary_therapist_message) or primary_therapist_message
-        print(f"[Callback] State condition 'add_concluding_note=True' met: Replacing agent {agent_name}'s output.")
     elif agent_name == 'fallback_therapist':
         fallback_therapist_message = current_state.get("fallback_therapist_response")
+        print('fallback_therapist_message', fallback_therapist_message)
         filtered_text = detect_crisis(fallback_therapist_message) or fallback_therapist_message
-        print(f"[Callback] State condition 'add_concluding_note=True' met: Replacing agent {agent_name}'s output.")
     else:
         print(f"[Callback] State condition not met: Using agent {agent_name}'s original output.")
+        return None
 
     return types.Content(
         parts=[types.Part(text=filtered_text)],

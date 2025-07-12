@@ -1,13 +1,11 @@
-from google.adk.agents import LlmAgent
-from google.adk.models.lite_llm import LiteLlm
-
-from core.config import MODEL_TEXT_PRIMARY
-from .prompts import mental_health_instruction
+from google.adk.agents import SequentialAgent
+from agents.callbacks.after_agent import modify_output_after_agent
+from agents.sub_agents.therapist.agent import primary_therapist_agent
+from agents.sub_agents.validation.agent import fallback_therapist_agent
 
 # root agent
-root_agent = LlmAgent(
-    name = "omani_therapist",
-    model = LiteLlm(model=MODEL_TEXT_PRIMARY),
-    description = "Given a user mental health query provide helpful guidance",
-    instruction = mental_health_instruction,
+root_agent = SequentialAgent(
+    name = "omani_therapist_pipeline",
+    description = "Process the user input using sub agents",
+    sub_agents = [primary_therapist_agent, fallback_therapist_agent],
 )

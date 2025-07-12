@@ -2,6 +2,7 @@ const recordAudioButton = document.getElementById('record-audio');
 const stopAudioButton = document.getElementById('stop-audio');
 const audioPlayback = document.getElementById('audio-playback');
 const consentCheckbox = document.getElementById('consent-checkbox');
+const welcomeMessage = document.getElementById('welcome-message');
 
 // Function to generate a UUID
 function generateUUID() {
@@ -12,39 +13,32 @@ function generateUUID() {
     });
 }
 
-// Get or generate USER_ID
+// Get or generate USER_ID and set welcome message
 let USER_ID = localStorage.getItem('user_id');
 if (!USER_ID) {
     USER_ID = generateUUID();
     localStorage.setItem('user_id', USER_ID);
+    welcomeMessage.textContent = 'Welcome';
+} else {
+    welcomeMessage.textContent = `Welcome back ${USER_ID}`;
 }
 
 // Generate a new SESSION_ID for each session
 const SESSION_ID = generateUUID();
 
+// Get session recording consent from localStorage
+let sessionRecordingConsent = localStorage.getItem('sessionRecordingConsent') === 'true';
+consentCheckbox.checked = sessionRecordingConsent;
+
 let mediaRecorder;
 let audioChunks = [];
 
-consentCheckbox.addEventListener('change', async () => {
-    recordAudioButton.disabled = !consentCheckbox.checked;
-    if (consentCheckbox.checked) {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-
-        mediaRecorder.ondataavailable = (event) => {
-            audioChunks.push(event.data);
-        };
-
-        audioPlayback.src = '/uploads/welcome.mp3';
+consentCheckbox.addEventListener('change', () => {
+    sessionRecordingConsent = consentCheckbox.checked;
+    localStorage.setItem('sessionRecordingConsent', sessionRecordingConsent);
+    if (sessionRecordingConsent) {
+        audioPlayback.src = '/static/welcome.mp3';
         audioPlayback.play();
-    } else {
-        if (audioPlayback) {
-            audioPlayback.pause();
-            audioPlayback.currentTime = 0;
-        }
-        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-            mediaRecorder.stop();
-        }
     }
 });
 
@@ -65,7 +59,13 @@ recordAudioButton.addEventListener('click', async () => {
         const formData = new FormData();
         formData.append('audio', audioBlob, 'recording.wav');
 
-        const response = await fetch(`/process?user_id=${USER_ID}&session_id=${SESSION_ID}`, {
+        let url = `/process?user_id=${USER_ID}`;
+        if (sessionRecordingConsent) {
+            url += `&session_id=${SESSION_ID}`;
+            url += `&consent=allow`;
+        }
+
+        const response = await fetch(url, {
             method: 'POST',
             body: formData
         });

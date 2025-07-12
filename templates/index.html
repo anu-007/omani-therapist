@@ -11,12 +11,20 @@
 <body>
     <div class="container">
         <h1>Omani Therapist</h1>
+        <h2 id="welcome-message">Welcome!</h2>
 
         <div class="input-container">
-            <input type="checkbox" id="consent-checkbox">
-            <label for="consent-checkbox">I consent to session recording</label>
+            <div class="consent-wrapper">
+                <input type="checkbox" id="consent-checkbox">
+                <label for="consent-checkbox">
+                    By proceeding, you agree to our collection of your conversation logs that may indicate
+                    crisis situations. This data helps improve our crisis response system. All information
+                    is handled with strict confidentiality, and your privacy is protected through a
+                    randomly generated user ID.
+                </label>
+            </div>
             <br>
-            <button id="record-audio" disabled>Record Audio</button>
+            <button id="record-audio">Record Audio</button>
             <button id="stop-audio" disabled>Stop Recording</button>
         </div>
         <audio id="audio-playback" controls></audio>

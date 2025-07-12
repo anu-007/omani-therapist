@@ -11,5 +11,5 @@ fallback_therapist_agent = LlmAgent(
     description = "Given a response from primary therepist evaluate and validate response for any harmful advice or suggestions",
     instruction = fallback_therapist_prompt,
     output_key = "fallback_therapist_response",
-    after_model_callback = modify_output_after_agent
+    after_agent_callback = modify_output_after_agent
 )
