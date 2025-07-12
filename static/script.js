@@ -83,7 +83,8 @@ recordAudioButton.addEventListener('click', async () => {
                     })
                     .catch(error => {
                         console.error('Error playing backend audio:', error);
-                        alert('Could not play backend audio. Check console for details.');
+                        audioPlayback.src = '/static/try_again.mp3';
+                        audioPlayback.play();
                     });
 
                 audioChunks = [];
@@ -94,7 +95,8 @@ recordAudioButton.addEventListener('click', async () => {
             }
         } catch (error) {
             console.error('Error during audio processing or playback:', error);
-            alert('An error occurred during processing or playing audio: ' + error.message);
+            audioPlayback.src = '/static/try_again.mp3';
+            audioPlayback.play();
         } finally {
             audioChunks = [];
         }
