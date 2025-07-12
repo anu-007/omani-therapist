@@ -4,7 +4,7 @@ from cryptography.fernet import Fernet
 from datetime import datetime
 
 DATABASE_FILE = 'crisis_logs.db'
-KEY_FILE = 'encryption.key'
+KEY_FILE = os.getenv("ENCRYPTION_KEY")
 
 def get_or_create_key():
     """Gets existing encryption key or creates a new one"""
