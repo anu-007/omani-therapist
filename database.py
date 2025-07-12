@@ -4,21 +4,9 @@ from cryptography.fernet import Fernet
 from datetime import datetime
 
 DATABASE_FILE = 'crisis_logs.db'
-KEY_FILE = os.getenv("ENCRYPTION_KEY")
-
-def get_or_create_key():
-    """Gets existing encryption key or creates a new one"""
-    if os.path.exists(KEY_FILE):
-        with open(KEY_FILE, 'rb') as key_file:
-            return key_file.read()
-    else:
-        key = Fernet.generate_key()
-        with open(KEY_FILE, 'wb') as key_file:
-            key_file.write(key)
-        return key
 
 # Initialize Fernet cipher
-cipher_suite = Fernet(get_or_create_key())
+cipher_suite = Fernet(os.getenv("ENCRYPTION_KEY"))
 
 def init_db():
     """Initializes the SQLite database and creates the crisis_logs table if it doesn't exist."""

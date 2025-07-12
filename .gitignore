@@ -13,13 +13,10 @@ venv/
 .env
 
 # static data
-uploads/
+uploads/*
 
 # encryption key
 encryption.key
 
 # crisis db logs
 crisis_logs.db
-
-# agent db
-my_agent_data.db

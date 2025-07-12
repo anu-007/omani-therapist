@@ -110,12 +110,13 @@ The system is composed of the following key components:
     ELEVENLABS_API_KEY=your_elevenlabs_api_key
     ANTHROPIC_API_KEY=your_anthropic_api_key
     ENCRYPTION_KEY=your_db_encryption_key (can be generated using generate_key.py)
+    PORT=port_number_for_application
     ```
 5.  **Run the application:**
     ```bash
-    uvicorn main:app --host 0.0.0.0 --port 8000
+    uvicorn main:app --host 0.0.0.0 --port $PORT
     ```
-6.  Open your browser and navigate to `http://localhost:8000`.
+6.  Open your browser and navigate to `http://localhost:<port>`.
 
 ---
 
