@@ -32,16 +32,15 @@ The Omani Therapist is a voice-based mental health chatbot designed to provide c
     * Ensures compliance with privacy regulations.
 
 4.  **AI Agents Layer**
-    * **Multiple Specialized Agents:** Different AI models optimized for various tasks (general assistance, domain-specific knowledge, etc.).
-    * **Crisis Detection Handler:** Uses NLP techniques to identify potential emergency situations.
+    * **Multiple Specialized Agents:** Different AI models for generation and validation of response.
+    * **Crisis Detection Handler:** Uses NLP techniques to identify potential emergency situations from the LLM model responses.
 
 5.  **Data Management Layer**
     * **Encrypted Logs:** Secure storage of conversation data with user consent.
-    * **Session Manager:** Maintains conversation context and user state.
+    * **Session Manager:** Maintains conversation context and user state and filter unwanted events to make execution faster.
 
 6.  **Response Generation**
     * **Text to Speech (ElevenLabs):** Converts AI responses back into natural-sounding voice output.
-    * Handles response formatting and delivery optimization.
 
 ---
 
@@ -68,7 +67,7 @@ The Omani Therapist is a voice-based mental health chatbot designed to provide c
     * The frontend plays the audio response to the user.
 
 2.  **Crisis Management Protocol**
-    * **Keyword-Based:** Once the user query is translated to text, this system checks for common crisis keywords and provides an emergency contact number.
+    * **Keyword-Based:** Once the user query is translated to text, this system checks for common crisis keywords and provides an static message and emergency contact number.
     * **NLP-Based:** Some queries are difficult to detect for any crisis. Therefore, another layer of LLM-based crisis detection is added where the model checks for user sentiment and flags the query as a crisis.
     * These protocols are enabled in three layers: once on user input and twice after the model's response.
     * Interaction logs are stored in an encrypted format for security and compliance in `crisis_logs.db`.
@@ -172,7 +171,7 @@ The safety of users is the highest priority. The following protocols are in plac
 
 ## Latency and Accuracy Metrics
 
-* **Latency:** The end-to-end latency (from user speaking to receiving a response) is expected to be between 9-15 seconds, depending on the length of the audio and the complexity of the query.
+* **Latency:** The end-to-end latency (from user speaking to receiving a response) is expected to be between 7-13 seconds, depending on the length of the audio and the complexity of the query.
 * **Accuracy:**
     * **Speech-to-Text:** Whisper's accuracy for Arabic is generally high, but can be affected by background noise and speaker accent.
     * **Therapeutic Response:** The dual-model approach aims for a high degree of therapeutic accuracy, with the Fallback agent ensuring that all responses are safe and appropriate.
