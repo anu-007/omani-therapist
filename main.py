@@ -62,7 +62,6 @@ async def process_input(
 
         # check if text is harmful or not
         harmful_text = detect_crisis(text_from_audio)
-        logger.info(f'harmful text delteced from keyword match: {harmful_text}')
 
         bot_response = None
         if harmful_text:
@@ -80,9 +79,9 @@ async def process_input(
 
         # Schedule cleanup for input file and output file
         background_tasks.add_task(delete_file, str(FILE_PATH))
-        background_tasks.add_task(delete_file, str(OUTPUT_AUDIO_PATH), 3000)
+        background_tasks.add_task(delete_file, str(OUTPUT_AUDIO_PATH), 300)
 
-        logger.info(bot_response)
+        logger.info("bot reseponse: f{bot_response}")
         media_type = "audio/mpeg" if OUTPUT_AUDIO_PATH.suffix == ".mp3" else "audio/wav"
         return FileResponse(OUTPUT_AUDIO_PATH, media_type=media_type)
     except Exception as e:

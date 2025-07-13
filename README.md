@@ -122,14 +122,25 @@ The system is composed of the following key components:
 
 ## Comparative Analysis for Dual Model Approach
 
-The dual-model approach was chosen to leverage the strengths of different AI models and create a robust safety net.
+## Overall Comparative Summary - Dual Model Approach
+In summary, GPT-4o excels in speed and conciseness without compromising quality or cultural relevance, making it ideal for the primary user-facing role. Claude Opus 4, despite its higher latency and token usage, offers a strong and reliable validation or fallback mechanism, ensuring robust support. (These observations are based on same convertation but different primary and fallback models)
 
-| Model                       | Role                        | Strengths                                                                     | Weaknesses                                                              |
-| :-------------------------- | :-------------------------- | :---------------------------------------------------------------------------- | :---------------------------------------------------------------------- |
-| **GPT-4o (Primary)** | Initial Response Generation | - High-quality, creative, and empathetic responses<br>- Strong language generation capabilities | - Can sometimes be too verbose or miss subtle safety cues               |
-| **Claude-Opus-4 (Fallback)** | Validation and Refinement   | - Excellent at following instructions and adhering to safety guidelines<br>- Strong analytical and reasoning skills | - Can be more conservative and less creative in its responses           |
 
-This combination allows for a system that is both therapeutically effective and highly secure.
+| Feature                 | GPT-4o (Primary)                                     | Claude Opus 4 (Fallback/Validation)                          | Claude Opus 4 (Primary)                                     | GPT-4o (Fallback/Validation)                          |
+| :---------------------- | :--------------------------------------------------- | :----------------------------------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------- |
+| **Response Quality** | Empathetic, concise, practical, culturally sensitive. | Empathetic, practical, slightly more verbose/conversational. | Empathetic, probing, detailed, conversational.              | Concise validation of primary's quality and safety.   |
+| **Cultural Fit (Omani)** | Excellent (prayer inclusion)                         | Excellent (prayer inclusion)                                 | Excellent (prayer inclusion, general cultural sensitivity) | Not directly applicable (validation role)             |
+| **Speed (Latency)** | **Faster (Avg. 3.8s)** | Slower (Avg. 8.8s)                                           | **Much Slower (Avg. 13.8s)** | **Much Faster (Avg. 2.7s)** |
+| **Token Usage** | **Lower (Avg. 77 tokens)** | Higher (Avg. 189 tokens)                                     | **Much Higher (Avg. 216 tokens)** | Lower (Avg. 56 tokens)                                |
+| **Crisis Handling** | **Extremely fast and direct intervention.** | Fast and direct intervention.                                | Fast and direct intervention.                               | Extremely fast and clear crisis detection/validation. |
+| **Overall Efficiency** | **High** | Moderate                                                     | Low                                                         | High                                                  |
+| **Primary Suitability** | **High (efficient, effective, culturally aware)** | Moderate (good content, but high latency/verbosity)          | Moderate (good content, but high latency/verbosity)         | N/A (designed for primary use)                        |
+| **Fallback Suitability**| N/A (designed for primary use)                       | **High (robust validation, good content)** | N/A (designed for primary use)                              | **High (rapid, clear validation)** |
+
+---
+
+## Sample convertation logs
+Some sample logs can be found here. [Convertations](logs/sample_conv.md)
 
 ---
 
@@ -165,11 +176,28 @@ The safety of users is the highest priority. The following protocols are in plac
 
 ## Future Roadmap
 
-* **Enhanced Crisis Detection:** Implement a more sophisticated crisis detection system by including audio cues from user input voice queries.
-* **Audio Record Logs:** Implement recording of audio from a session based on user consent.
-* **Data Storage:** Migrate to document storage for scaling this application to handle more data.
-* **User Profiles:** Allow users to create profiles to track their progress and personalize their experience.
-* **Better UX:** Implement a better UI for a better user experience by removing unwanted elements from the UI.
-* **Multi-modal Support:** Introduce text-based chat and video sessions.
-* **Integration with Healthcare Providers:** Develop a system for users to connect with human therapists if needed.
-* **Crisis Dashboard:** Create a crisis-handling dashboard from crisis logs, which is handled by a professional therapist.
+### Standalone Crisis Detection Module
+* **Professional Intervention:** Implement clear protocols and automated triggers for seamless handoff to human mental health professionals or emergency services when a crisis is detected.
+* **Crisis Dashboard:** Develop a dedicated dashboard for supervisors to monitor real-time crisis alerts, review flagged conversations, and manage interventions efficiently.
+* **Integration with Healthcare Providers:** Establish secure and compliant pathways for direct integration with local healthcare providers and emergency services, enabling swift and coordinated support during crises.
+
+### Sentiment Analysis from Audio and Multi-Modal Support
+* **Detect Sentiment from User Audio Input:** Integrate advanced audio emotion analysis (e.g., using technologies like iMentiv.ai's Audio Emotion Analysis) to detect subtle emotional cues directly from the user's voice. This sentiment data will then be passed to the LLM agents, allowing for more nuanced and empathetic responses.
+* **Add Emotional Tags for Audio Delivery:** Utilize capabilities such as ElevenLabs' emotional deliveries with audio tags to generate natural-sounding voice outputs that reflect appropriate emotional tones, enhancing the perceived empathy and human-likeness of the chatbot.
+* **Support for Text and Video:** Expand the system to support text and video inputs, integrating sentiment analysis for these modalities as well. This will create a more versatile and accessible platform for users who prefer different communication methods.
+
+### Replace Database with Object Store
+* **Record and Store Audio Conversations:** Implement functionality to securely record and store audio conversations, with strict encryption measures, only upon obtaining explicit user consent.
+* **HIPAA Compliance:** Design and implement all data handling and storage processes to meet stringent healthcare data privacy standards, including HIPAA compliance.
+
+### Better UI/UX
+* **Improved User Interface (UI):** Enhance the visual design and layout of the chat interface for improved readability and ease of interaction.
+* **Enhanced User Experience (UX):** Streamline the conversational flow, reduce friction points, and introduce features that make interactions feel more natural and supportive.
+
+### Better Terms and Conditions and Usage Guides
+* **Clearer Terms and Conditions:** Develop concise and transparent terms and conditions that clearly outline data privacy, AI limitations, and user responsibilities.
+* **Comprehensive Usage Guides:** Create user-friendly guides that explain how to best interact with the chatbot, what to expect, and where to seek human help if needed.
+
+### Tweak Prompts Based on Cultural Input for a Regional Therapist
+* **Continuous Cultural Feedback Loop:** Establish an ongoing process for incorporating feedback from native Omani Arabic speakers and cultural experts to fine-tune agent prompts.
+* **Enhanced Regional Nuance:** Iteratively adjust the prompts to deepen the chatbot's understanding and application of Omani cultural values, idioms, and specific socio-religious contexts in its therapeutic responses.
