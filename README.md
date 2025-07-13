@@ -6,6 +6,11 @@ The Omani Therapist is a voice-based mental health chatbot designed to provide c
 
 ---
 
+## Demo video
+[![Demo](https://github.com/user-attachments/assets/571e79d2-dc45-406b-85a3-f4856737206c)](https://www.youtube.com/watch?v=1jChc8BaOzo)
+
+---
+
 ## Architecture Diagram
 ![Architecture Diagram](https://github.com/user-attachments/assets/3874b979-01a2-4ff3-a48d-0e2df361058d)
 
