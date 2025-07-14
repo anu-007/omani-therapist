@@ -11,8 +11,8 @@ The Omani Therapist is a voice-based mental health chatbot designed to provide c
 
 ---
 
-## Architecture Diagram
-![Architecture Diagram](https://github.com/user-attachments/assets/3874b979-01a2-4ff3-a48d-0e2df361058d)
+## Flow Diagram
+![Flow Diagram](https://github.com/user-attachments/assets/3874b979-01a2-4ff3-a48d-0e2df361058d)
 
 1.  **User Interface Layer**
     * **Voice Input:** This is the entry point where users interact with the system through voice commands.
@@ -44,8 +44,8 @@ The Omani Therapist is a voice-based mental health chatbot designed to provide c
 
 ---
 
-## Flow Diagram
-![Flow diagram](https://github.com/user-attachments/assets/cb29a0ee-99b8-4e00-b764-f4be943804e6)
+## Architecture Diagram
+![Architecture Diagram](https://github.com/user-attachments/assets/cb29a0ee-99b8-4e00-b764-f4be943804e6)
 
 1.  **Core Flow**
     * The user records an audio message in the browser and clicks `Stop Recording`.
